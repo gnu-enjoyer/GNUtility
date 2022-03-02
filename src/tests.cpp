@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include <fstream>
 
 #include "gnutility.hpp"
 
@@ -18,10 +19,17 @@ class TestingHarness {
 
     };
 
+    [[nodiscard]] bool  TestSettings() const {
+
+        if(*gnutility::Cfg.ConfigValue("debug") == "test")
+            return false;
+
+        return true;
+
+    }
 
     bool AnyFailed = false;
     std::vector<bool> test_cases;
-
 
 public:
 
@@ -31,7 +39,9 @@ public:
 
 
     TestingHarness(){
+
         test_cases.push_back(TestLogger());
+        test_cases.push_back(TestSettings());
 
         for(auto &&failed : test_cases){
 
@@ -46,10 +56,12 @@ public:
 
 };
 
+
+
 int main(){
 
     if(auto Test = TestingHarness(); Test.GetAnyFailed())
-        return -1;
+        return 1;
 
     return 0;
 }
