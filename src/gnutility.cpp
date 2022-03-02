@@ -62,7 +62,7 @@ namespace gnutility
     void Settings::ParseJSON(const char *str, configFile *cfg) {
 
         if (auto path = std::filesystem::path(str); !std::filesystem::exists(path))
-            assert(createConfigFile());
+            createConfigFile();
 
         simdjson::ondemand::parser parser;
         simdjson::padded_string json = simdjson::padded_string::load(str);
