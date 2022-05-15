@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 set(namespace "gnutility")
 
 project("gnutility"
-    VERSION 1.1.0)
+    VERSION 1.1.1)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -30,6 +30,7 @@ add_library(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${fmt_SOURCE_DIR}/include
         ${simdjson_SOURCE_DIR}/include
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
