@@ -1,6 +1,8 @@
 # GNUtility
 C++20 flat utility library
  
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/gnu-enjoyer/GNUtility)
+
 # Features
 
 - Threadsafe logger
@@ -13,7 +15,7 @@ You can download the latest release as a packed build artefact and include the p
 
 CMake integration supports either use case.
 
-Note: use exported target `gnutility-deps` if transitive linkage is desired
+Note: use exported target `gnutility-deps` if transitive linkage is desired.
 
 # Acknowledgements
 

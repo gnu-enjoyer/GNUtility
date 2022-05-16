@@ -32,8 +32,22 @@
 *.app
 
 # CMake
-/cmake-build-debug
-/cmake-build-release
+!/cmake
+cmake-build-debug
+cmake-build-release
+CMakeFiles
+*.cmake
+CMakeCache.txt
 
 # IDEs
 .idea
+.vscode/settings.json
+
+# Build cache
+build
+_deps
+.cache
+Makefile
+gnutils_bundle.ar.in
+gnutils_bundle.ar
+

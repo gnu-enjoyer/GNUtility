@@ -23,9 +23,11 @@ namespace gnutility
     }
 
     Logger &Logger::get() {
+
         static Logger instance;
         //volatile int dummy{};
         return instance;
+        
     }
 
     Logger::Logger() {
@@ -44,18 +46,12 @@ namespace gnutility
                 "{\n \"debug\":\"test\"\n}"
         };
 
-        //if(std::filesystem::exists(fd))
-        //    std::remove(fd);
-
-        std::ofstream o("config.json");
+        std::ofstream o("config.json");        
         o << debug << std::endl;
 
         o.close();
 
-        if(std::filesystem::exists(fd))
-            return true;
-
-        return false;
+        return (std::filesystem::exists(fd));
 
     }
 
@@ -70,11 +66,10 @@ namespace gnutility
         simdjson::ondemand::document iterator = parser.iterate(json);
         simdjson::ondemand::object object = iterator.get_object();
 
-        for (auto &&obj: object) {
-
+        for (auto &&obj: object)
             cfg->try_emplace(std::string(obj.unescaped_key().value()),
                              obj.value().get_string().value());
-        }
+
     }
 
     Settings::Settings(const char* str) {

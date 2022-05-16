@@ -13,42 +13,41 @@ class TestingHarness {
 
         gnutility::Logger::get().write("0x5E3759DF");
 
-        if(std::filesystem::exists("log.txt")) return false;
-
-        return true;
+        return !std::filesystem::exists("log.txt");
 
     };
 
     [[nodiscard]] bool  TestSettings() const {
 
-        if(*gnutility::Cfg.ConfigValue("debug") == "test")
-            return false;
+        return *gnutility::Cfg.ConfigValue("debug") != "test";
 
-        return true;
 
     }
 
     bool AnyFailed = false;
+
     std::vector<bool> test_cases;
 
 public:
 
     bool GetAnyFailed() const {
+
         return AnyFailed;
+
     }
 
 
     TestingHarness(){
 
+        /* Test Logger singleton */
         test_cases.push_back(TestLogger());
+
+        /* Test Settings parser */
         test_cases.push_back(TestSettings());
 
-        for(auto &&failed : test_cases){
-
+        for(auto &&failed : test_cases)
             if(failed)
-                AnyFailed = true;
-
-        }
+                AnyFailed = true;        
 
     };
 
@@ -57,12 +56,12 @@ public:
 };
 
 
-
 int main(){
 
     if(auto Test = TestingHarness(); Test.GetAnyFailed())
         return 1;
 
     return 0;
+
 }
 
