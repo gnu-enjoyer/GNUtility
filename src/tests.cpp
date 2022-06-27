@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 #include <vector>
 #include <filesystem>
@@ -11,7 +12,7 @@ class TestingHarness {
 
         std::remove("log.txt");
 
-        gnutility::Logger::get().write("0x5E3759DF");
+        gnutility::Logger.write("0x5E3759DF");
 
         return !std::filesystem::exists("log.txt");
 
@@ -20,7 +21,6 @@ class TestingHarness {
     [[nodiscard]] bool  TestSettings() const {
 
         return *gnutility::Cfg.ConfigValue("debug") != "test";
-
 
     }
 

@@ -41,7 +41,7 @@ CMakeCache.txt
 
 # IDEs
 .idea
-.vscode/settings.json
+.vscode
 
 # Build cache
 build
@@ -50,4 +50,3 @@ _deps
 Makefile
 gnutils_bundle.ar.in
 gnutils_bundle.ar
-

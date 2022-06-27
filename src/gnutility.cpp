@@ -13,28 +13,17 @@
 
 namespace gnutility
 {
-    void Logger::write(const char *in, bool err) {
+    void Log::write(const std::string& str, bool err ) const {
 
-            *logfile << fmt::format("{0:%F_%T}",
-                                    std::chrono::system_clock::now());
+        std::scoped_lock lock(mtx);
 
-            err ? *logfile << " [ERROR] " << in << std::endl : *logfile << " [INFO] " << in << std::endl;
+        std::ofstream logfile("log.txt", std::ofstream::app);
 
-    }
+        logfile << fmt::format("{0:%F_%T}", std::chrono::system_clock::now());
 
-    Logger &Logger::get() {
+        err ? logfile << " [ERROR] " << str << std::endl : logfile << " [INFO] " << str << std::endl;
 
-        static Logger instance;
-        //volatile int dummy{};
-        return instance;
-        
-    }
-
-    Logger::Logger() {
-
-        logfile = new std::ofstream("log.txt", std::fstream::app);
-
-    }
+    }    
 
     bool Settings::createConfigFile() {
 
