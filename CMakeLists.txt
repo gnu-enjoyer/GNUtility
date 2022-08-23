@@ -46,7 +46,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(bundle)
 
-bundle_static_library(gnutility gnutility_flat)
+bundle_static_library(gnutility gnutility_bundle)
 
 enable_testing()
 
