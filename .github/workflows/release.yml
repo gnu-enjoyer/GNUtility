@@ -28,7 +28,7 @@ jobs:
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ github.token }}
-        file: ${{github.workspace}}/build/libgnutils_bundle.a
+        file: ${{github.workspace}}/build/libgnutility_bundle.a
         asset_name: x86_64-pc-linux-gnu-utility.a
         prerelease: true
         tag: ${{ github.ref }}
