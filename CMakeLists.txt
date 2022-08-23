@@ -7,6 +7,11 @@ project("gnutility"
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_EXE_LINKER_FLAGS "-static")
+
+set(public_headers
+        include/gnutility.hpp)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -23,60 +28,26 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(fmt simdjson)
 
-add_library(${PROJECT_NAME}
+add_library(gnutility
+        STATIC
         src/gnutility.cpp
         )
 
-target_include_directories(${PROJECT_NAME}
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${fmt_SOURCE_DIR}/include
-        ${simdjson_SOURCE_DIR}/include
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-        )
-
-set(public_headers
-    include/gnutility.hpp)
-
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(gnutility)
-
-if(CMAKE_COMPILER_IS_GNUCXX)
-    target_compile_options(${PROJECT_NAME} PRIVATE -Werror)
-endif()
-
-#flatpack any deps
-include(bundle)
-
-add_library(gnutility-deps
-        STATIC
-        src/gnutility.cpp)
-
-target_link_libraries(gnutility-deps
-        fmt
-        simdjson)
-
-target_include_directories(gnutility-deps
-        PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        )
-
-bundle_static_library(gnutility-deps gnutils_bundle)
-
-#CTest
-enable_testing()
-
-add_executable(gnutility-tests
-        src/tests.cpp)
-
-target_include_directories(gnutility-tests
+target_include_directories(gnutility
         PUBLIC
         include)
 
-target_link_libraries(gnutility-tests
-        ${CMAKE_BINARY_DIR}/libgnutils_bundle.a)
+target_link_libraries(gnutility
+        PRIVATE
+        fmt
+        simdjson)
 
-add_test(gnutility-ctest
-        gnutility-tests)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+include(bundle)
+
+bundle_static_library(gnutility gnutility_flat)
+
+enable_testing()
+
+add_subdirectory(tests)
