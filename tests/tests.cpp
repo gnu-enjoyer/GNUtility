@@ -1,67 +1,61 @@
 #include <cassert>
-#include <iostream>
-#include <vector>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
+#include <vector>
 
 #include "gnutility.hpp"
 
 class TestingHarness {
 
-    [[nodiscard]] bool  TestLogger() const {
+  [[nodiscard]] bool TestLogger() const {
 
-        std::remove("log.txt");
+    std::remove("log.txt");
 
-        gnutility::Logger.write("0x5E3759DF");
+    gnutility::Logger.write("0x5E3759DF");
 
-        return !std::filesystem::exists("log.txt");
+    return !std::filesystem::exists("log.txt");
+  };
 
-    };
+  [[nodiscard]] bool TestSettings() const {
 
-    [[nodiscard]] bool  TestSettings() const {
+    auto cfg = gnutility::Settings::ParseJSON("config.json");
 
-        return *gnutility::Cfg.ConfigValue("debug") != "test";
-
+    for (auto& i : *cfg) {
+      if (i.first != "debug")
+        return true;
     }
 
-    bool AnyFailed = false;
+    return cfg->empty();
+  }
 
-    std::vector<bool> test_cases;
+  bool AnyFailed = false;
+
+  std::vector<bool> test_cases;
 
 public:
+  bool GetAnyFailed() const { return AnyFailed; }
 
-    bool GetAnyFailed() const {
+  TestingHarness() {
 
-        return AnyFailed;
+    /* Test Logger singleton */
+    test_cases.push_back(TestLogger());
 
-    }
+    /* Test Settings parser */
+    test_cases.push_back(TestSettings());
 
+    for (auto&& failed : test_cases)
+      if (failed)
+        AnyFailed = true;
+  };
 
-    TestingHarness(){
-
-        /* Test Logger singleton */
-        test_cases.push_back(TestLogger());
-
-        /* Test Settings parser */
-        test_cases.push_back(TestSettings());
-
-        for(auto &&failed : test_cases)
-            if(failed)
-                AnyFailed = true;        
-
-    };
-
-    ~TestingHarness() = default;
-
+  ~TestingHarness() = default;
 };
 
+int main() {
 
-int main(){
+  if (auto Test = TestingHarness(); Test.GetAnyFailed())
+    return 1;
 
-    if(auto Test = TestingHarness(); Test.GetAnyFailed())
-        return 1;
-
-    return 0;
-
+  return 0;
 }
-
