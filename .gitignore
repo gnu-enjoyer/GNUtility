@@ -50,3 +50,8 @@ _deps
 Makefile
 gnutils_bundle.ar.in
 gnutils_bundle.ar
+
+# Artefacts
+config.json
+log.txt
+Testing

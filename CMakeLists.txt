@@ -5,9 +5,9 @@ set(namespace "gnutility")
 project("gnutility"
     VERSION 1.1.1)
 
-set(CMAKE_CXX_STANDARD 20)
+include(CTest)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_CXX_STANDARD 20)
 
 set(public_headers
         include/gnutility.hpp)
@@ -30,8 +30,12 @@ FetchContent_MakeAvailable(fmt simdjson)
 
 add_library(gnutility
         STATIC
-        src/gnutility.cpp
-        )
+        src/gnutility.cpp)
+
+set_target_properties(gnutility
+        PROPERTIES 
+        CMAKE_EXE_LINKER_FLAGS 
+        "-static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
 
 target_include_directories(gnutility
         PUBLIC

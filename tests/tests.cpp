@@ -1,7 +1,9 @@
 #include <cassert>
 #include <filesystem>
 #include <fstream>
+#include <future>
 #include <iostream>
+#include <thread>
 #include <vector>
 
 #include "gnutility.hpp"
@@ -12,7 +14,18 @@ class TestingHarness {
 
     std::remove("log.txt");
 
-    gnutility::Logger.write("0x5E3759DF");
+    auto thread_count = std::thread::hardware_concurrency();
+
+    std::vector<std::future<void>> futures{};
+
+    for (unsigned int i = 0; i < thread_count; ++i) {
+
+      futures.emplace_back(std::async(
+          std::launch::async, []() { gnutility::Log::write("0x5E3759DF"); }));
+    }
+
+    for (auto& i : futures)
+      i.wait();
 
     return !std::filesystem::exists("log.txt");
   };
@@ -38,7 +51,7 @@ public:
 
   TestingHarness() {
 
-    /* Test Logger singleton */
+    /* Test Logger */
     test_cases.push_back(TestLogger());
 
     /* Test Settings parser */

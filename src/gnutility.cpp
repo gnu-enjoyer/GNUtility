@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "fmt/chrono.h"
@@ -12,7 +13,7 @@
 #include "gnutility.hpp"
 
 namespace gnutility {
-void Log::write(const std::string& str, bool err) const {
+void Log::write(const std::string& str, bool err) {
 
   std::scoped_lock lock(mtx);
 
@@ -26,23 +27,23 @@ void Log::write(const std::string& str, bool err) const {
 
 bool Settings::createConfigFile() {
 
-  const char fd[32] = "config.json";
+  constexpr std::string_view fd{"config.json"};
 
   if (std::filesystem::exists(fd))
     return true;
 
-  const char debug[32] = {"{\n \"debug\":\"test\"\n}"};
+  constexpr std::string_view debug{"{\n \"debug\":\"test\"\n}"};
 
   std::ofstream o("config.json");
   o << debug << std::endl;
 
   o.close();
 
-
   return (std::filesystem::exists(fd));
 }
 
-std::unique_ptr<gnutility::Settings::configFile> Settings::ParseJSON(const char* str) {
+std::unique_ptr<gnutility::Settings::configFile>
+Settings::ParseJSON(const char* str) {
 
   if (auto path = std::filesystem::path(str); !std::filesystem::exists(path))
     createConfigFile();

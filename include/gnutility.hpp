@@ -11,13 +11,13 @@ namespace gnutility {
 
 class Log {
 
-  mutable std::mutex mtx;
+  static inline std::mutex mtx;
 
 public:
   /// Writes to log.txt
   /// \param [in] in Text to be written
   /// \param [in] err Format as [ERROR] or [INFO]
-  void write(const std::string& str, bool err = false) const;
+  static void write(const std::string& str, bool err = false);
 };
 
 class Settings {
@@ -39,8 +39,6 @@ public:
   static std::unique_ptr<gnutility::Settings::configFile>
   ParseJSON(const char* str);
 };
-
-inline Log const Logger;
 
 } // namespace gnutility
 

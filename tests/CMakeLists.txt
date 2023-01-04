@@ -15,5 +15,5 @@ target_link_libraries(gnutility-tests
         PRIVATE
         gnutility)
 
-add_test(gnutility-ctest
-        gnutility-tests)
+add_test(NAME gnutility-tests
+        COMMAND gnutility-tests)
